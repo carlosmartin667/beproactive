@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using System.Text.Json.Serialization;
 
 namespace ApiDevBP.Entities
 {
@@ -7,7 +6,7 @@ namespace ApiDevBP.Entities
     public class UserEntity
     {
         [PrimaryKey, AutoIncrement]
-        [JsonIgnore]
+        //[JsonIgnore]
         public int Id { get; set; }
         public string Name { get; set; } 
         public string Lastname { get; set; }

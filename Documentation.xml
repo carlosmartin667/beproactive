@@ -4,5 +4,29 @@
         <name>ApiDevBP</name>
     </assembly>
     <members>
+        <member name="T:ApiDevBP.Migrations.hola">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.hola.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.hola.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.hola.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:ApiDevBP.Migrations.dos">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.dos.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.dos.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:ApiDevBP.Migrations.dos.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

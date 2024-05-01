@@ -1,5 +1,10 @@
+using ApiDevBP;
+using ApiDevBP.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseSerilog();
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -22,8 +29,20 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"./Documentation.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+// Dentro del método ConfigureServices en el archivo Startup.cs
+builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection("Database"));
+
+builder.Services.AddDbContext<DatabaseDbContext>((serviceProvider, options) =>
+{
+    var databaseOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>().Value;
+    options.UseSqlite(databaseOptions.ConnectionString, op =>
+    {
+        op.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
+    });
+});
 
 
+builder.Services.AddInfrastructure();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

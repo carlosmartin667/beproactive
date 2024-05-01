@@ -2,24 +2,23 @@
 using ApiDevBP.Entities;
 using ApiDevBP.Models;
 using ApiDevBP.Services;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 public class UserService : IUserService
 {
     private readonly DatabaseDbContext _dbContext;
+    private readonly IMapper _mapper;
 
-    public UserService(DatabaseDbContext dbContext)
+    public UserService(DatabaseDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     public async Task SaveUser(UserModel user)
     {
-        var usuario = new UserEntity()
-        {
-            Name = user.Name,
-            Lastname = user.Lastname
-        };
+        var usuario = _mapper.Map<UserEntity>(user);
         _dbContext.UserEntities.Add(usuario);
         await _dbContext.SaveChangesAsync();
     }
@@ -30,44 +29,19 @@ public class UserService : IUserService
             .Where(u => u.Lastname == lastName)
             .ToListAsync();
 
-        return usersWithSameLastName.Select(x => new UserModel()
-        {
-            Name = x.Name,
-            Lastname = x.Lastname
-        }).ToList();
+        return _mapper.Map<List<UserModel>>(usersWithSameLastName);
     }
 
     public async Task<List<UserModel>> GetAllUsers()
     {
-        try
-        {
-            var users = await _dbContext.UserEntities.ToListAsync();
-
-            return users.Select(x => new UserModel()
-            {
-                Name = x.Name,
-                Lastname = x.Lastname
-            }).ToList();
-        }
-        catch (Exception ex)
-        {
-
-            throw;
-        }
-
+        var users = await _dbContext.UserEntities.ToListAsync();
+        return _mapper.Map<List<UserModel>>(users);
     }
 
     public async Task<UserModel> GetUserById(int id)
     {
         var user = await _dbContext.UserEntities.FindAsync(id);
-        if (user == null)
-            return null;
-
-        return new UserModel()
-        {
-            Name = user.Name,
-            Lastname = user.Lastname
-        };
+        return _mapper.Map<UserModel>(user);
     }
 
     public async Task UpdateUser(int id, UserModel user)
@@ -75,8 +49,7 @@ public class UserService : IUserService
         var existingUser = await _dbContext.UserEntities.FindAsync(id);
         if (existingUser != null)
         {
-            existingUser.Name = user.Name;
-            existingUser.Lastname = user.Lastname;
+            _mapper.Map(user, existingUser);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -1,5 +1,7 @@
 using ApiDevBP;
 using ApiDevBP.Data;
+using ApiDevBP.MappingProfile;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -17,7 +19,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseSerilog();
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
 
+IMapper mapper = mapperConfig.CreateMapper();
 
 builder.Services.AddSwaggerGen(options =>
 {

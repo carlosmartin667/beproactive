@@ -1,5 +1,6 @@
 ﻿using ApiDevBP.Data;
 using ApiDevBP.Services;
+using System.Reflection;
 
 namespace ApiDevBP
 {
@@ -7,8 +8,8 @@ namespace ApiDevBP
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-        
-         
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<DatabaseDbContext>();
 

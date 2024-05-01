@@ -1,5 +1,6 @@
 using ApiDevBP.Models;
 using ApiDevBP.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiDevBP.Controllers
@@ -51,13 +52,53 @@ namespace ApiDevBP.Controllers
             }
         }
 
-        [HttpGet("GetUsersID")]
-        public async Task<IActionResult> GetUsersID()
+        [HttpGet]
+        public async Task<IActionResult> GetUsers()
         {
             try
             {
                 var users = await _userService.GetAllUsers();
                 if (users != null && users.Count > 0)
+                {
+                    return Ok(users);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener todos los usuarios.");
+                return StatusCode(500, "Error interno del servidor.");
+            }
+        }
+
+        [HttpGet("GetUsersID")]
+        public async Task<IActionResult> GetUsersID()
+        {
+            try
+            {
+                var users = await _userService.GetAllUsersId();
+                if (users != null && users.Count > 0)
+                {
+                    return Ok(users);
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener todos los usuarios.");
+                return StatusCode(500, "Error interno del servidor.");
+            }
+        }
+
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsersByID(int id)
+        {
+            try
+            {
+                var users = await _userService.GetUserById(id);
+                if (users != null)
                 {
                     return Ok(users);
                 }
@@ -86,6 +127,7 @@ namespace ApiDevBP.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try

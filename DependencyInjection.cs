@@ -8,7 +8,8 @@ namespace ApiDevBP
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-
+            services.AddScoped<IGenerateJwtToken, GenerateJwtToken>();
+            
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<DatabaseDbContext>();

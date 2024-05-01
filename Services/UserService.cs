@@ -32,6 +32,11 @@ public class UserService : IUserService
         return _mapper.Map<List<UserModel>>(usersWithSameLastName);
     }
 
+    public async Task<List<UserEntity>> GetAllUsersId()
+    {
+        var users = await _dbContext.UserEntities.ToListAsync();
+        return users;
+    }
     public async Task<List<UserModel>> GetAllUsers()
     {
         var users = await _dbContext.UserEntities.ToListAsync();
